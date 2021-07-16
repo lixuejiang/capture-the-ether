@@ -38,6 +38,7 @@ it("solves the challenge", async function () {
   console.log(`Secret number was ${number}`);
   const tx = await contract.guess(number, {
     value: ethers.utils.parseEther(`1`),
+    gasLimit: 1e5,
   });
   const txHash = tx && tx.hash;
   console.log(formatEtherscanTx(txHash));

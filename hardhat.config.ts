@@ -1,27 +1,19 @@
 import dotenv from "dotenv";
 dotenv.config(); // load env vars from .env
-import { task, HardhatUserConfig } from "hardhat/config";
+import { HardhatUserConfig } from "hardhat/config";
 import "@nomiclabs/hardhat-waffle";
-import "./tasks/index";
 
-const { ARCHIVE_URL, MNEMONIC } = process.env;
+const { ARCHIVE_URL, PRIVATE_KEY1 } = process.env;
 
 if (!ARCHIVE_URL)
   throw new Error(
     `ARCHIVE_URL env var not set. Copy .env.template to .env and set the env var`
   );
-if (!MNEMONIC)
-  throw new Error(
-    `MNEMONIC env var not set. Copy .env.template to .env and set the env var`
-  );
 
-const accounts = {
-  // derive accounts from mnemonic, see tasks/create-key
-  mnemonic: MNEMONIC,
-};
 
 // Go to https://hardhat.org/config/ to learn more
 const config: HardhatUserConfig = {
+  defaultNetwork: "ropsten",
   solidity: {
     compilers: [
       // old ethernaut compiler
@@ -32,14 +24,9 @@ const config: HardhatUserConfig = {
   networks: {
     ropsten: {
       url: ARCHIVE_URL,
-      accounts,
+      accounts: [PRIVATE_KEY1 as string],
     },
     hardhat: {
-      accounts,
-      forking: {
-        url: ARCHIVE_URL, // https://eth-ropsten.alchemyapi.io/v2/SECRET`,
-        blockNumber: 9389313,
-      },
     },
   },
   mocha: {
